@@ -21,7 +21,7 @@ namespace WhatsMySteamId.Controllers
             {
                 try
                 {
-                    SteamId steamId = new SteamId(model.SearchString, "639AA081215E275484A5DFB24FAF193C");
+                    SteamId steamId = new SteamId(model.SearchString, "");
 
                     ulong steamId64 = steamId.To64Bit();
 
