@@ -1,7 +1,55 @@
-﻿
+﻿@model WhatsMySteamId.Models.HomeIndexViewModel
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "What's My Steam ID?";
 }
 
-<h2>Index</h2>
-
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("")
+            <div class="form-group">
+                <label class="control-label">Enter Your Community URL or Profile ID/Name</label>
+                <div class="input-group">
+                    @Html.TextBoxFor(x => x.SearchString, new { @class = "form-control" })
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        }
+        @if (Model.IsValidSteamAccount)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Your Steam ID Results</h4>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Resolved By:</dt>
+                        <dd>@Model.ResolvedBy</dd>
+                        <dt>Community URL:</dt>
+                        <dd><a href="@Model.CommunityProfileUrl">@Model.CommunityProfileUrl</a></dd>
+                        <dt>64-bit Steam ID:</dt>
+                        <dd>@Model.SteamId64</dd>
+                        <dt>Legacy Steam ID:</dt>
+                        <dd>@Model.LegacySteamId</dd>
+                        <dt>Modern Steam ID:</dt>
+                        <dd>@Model.ModernSteamId</dd>
+                        <dt>Universe:</dt>
+                        <dd>@Model.Universe</dd>
+                        <dt>Account Type:</dt>
+                        <dd>@Model.AccountType</dd>
+                        <dt>Instance:</dt>
+                        <dd>@Model.Instance</dd>
+                        <dt>32-bit Account ID:</dt>
+                        <dd>@Model.AccountId</dd>
+                    </dl>
+                </div>
+            </div>}
+    </div>
+</div>
