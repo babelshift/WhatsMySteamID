@@ -1,6 +1,7 @@
 ﻿using SteamWebAPI2.Exceptions;
 using SteamWebAPI2.Models;
 using System;
+using System.Configuration;
 using System.Web.Mvc;
 using WhatsMySteamId.Models;
 
@@ -21,7 +22,8 @@ namespace WhatsMySteamId.Controllers
             {
                 try
                 {
-                    SteamId steamId = new SteamId(model.SearchString, "");
+                    string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
+                    SteamId steamId = new SteamId(model.SearchString, steamWebApiKey);
 
                     ulong steamId64 = steamId.To64Bit();
 
