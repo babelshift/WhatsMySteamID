@@ -29,7 +29,7 @@ namespace WhatsMySteamId.Controllers
 
                     model.AccountId = steamId.AccountId;
                     model.AccountType = steamId.AccountType.ToString();
-                    model.Instance = steamId.InstanceId.ToString();
+                    model.Instance = steamId.Instance.ToString();
                     model.CommunityProfileUrl = String.Format("http://steamcommunity.com/profiles/{0}", steamId64);
                     model.LegacySteamId = steamId.ToLegacyFormat();
                     model.ModernSteamId = steamId.ToModernFormat();
