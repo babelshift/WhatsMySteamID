@@ -1,14 +1,24 @@
-﻿using SteamWebAPI2.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using SteamWebAPI2.Exceptions;
 using SteamWebAPI2.Models;
+using SteamWebAPI2.Utilities;
 using System;
-using System.Configuration;
-using System.Web.Mvc;
+using System.Net.Http;
+using System.Threading.Tasks;
 using WhatsMySteamId.Models;
 
 namespace WhatsMySteamId.Controllers
 {
     public class HomeController : Controller
     {
+        public static IConfiguration Configuration { get; set; }
+
+        public HomeController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         // GET: Home
         public ActionResult Index()
         {
@@ -16,15 +26,17 @@ namespace WhatsMySteamId.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(HomeIndexViewModel model)
+        public async Task<ActionResult> Index(HomeIndexViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
-                    SteamId steamId = new SteamId(model.SearchString, steamWebApiKey);
+                    string steamWebApiKey = Configuration["SteamWebApiKey"];
+                    var webInterfaceFactory = new SteamWebInterfaceFactory(steamWebApiKey);
 
+                    var steamId = webInterfaceFactory.CreateSteamWebInterface<SteamId>(new HttpClient());
+                    await steamId.ResolveAsync(model.SearchString);
                     ulong steamId64 = steamId.To64Bit();
 
                     model.AccountId = steamId.AccountId;
